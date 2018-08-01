@@ -43,10 +43,18 @@ module.exports.getSlideById = function(id, callback){
     Slide.findById(id, callback);
 }
 
+//Overload 2 - Takes options
+module.exports.updateSlide = function(id, update,options, callback)
+{
+    Slide.findByIdAndUpdate(id, update, options, callback);
+}
+
+//Overload 1 - Doesn't take options
 module.exports.updateSlide = function(id, update, callback)
 {
     Slide.findByIdAndUpdate(id, update, callback);
 }
+
 
 module.exports.addSlideToScreen = function(id, screen, callback){
     Slide.findByIdAndUpdate(id, {
@@ -65,6 +73,10 @@ module.exports.removeSlideFromScreen = function(id, screen, callback)
             }
         }
     }, callback);
+}
+
+module.exports.removeSlideById = function(id, callback){
+    Slide.findByIdAndRemove(id, callback);
 }
 
 
