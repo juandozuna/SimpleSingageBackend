@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const slideSchema = new Schema({
     title: {type: String, required: true},
@@ -24,6 +25,7 @@ const slideSchema = new Schema({
     overlayHtml: String
 });
 
+slideSchema.plugin(AutoIncrement, {inc_field: 'displayOrder'});
 
 const Slide = module.exports = mongoose.model('Slide', slideSchema);
 
@@ -36,7 +38,7 @@ module.exports.getSlidesByScreen = function(screen, callback){
 }
 
 module.exports.addSlide = function(slide, callback){
-    Slide.create(slide,callback);
+    Slide.create(slide, callback);
 }
 
 module.exports.getSlideById = function(id, callback){
@@ -56,20 +58,23 @@ module.exports.updateSlide = function(id, update, callback)
 }
 
 
-module.exports.addSlideToScreen = function(id, screen, callback){
+module.exports.addSlideToScreens = function(id, screens, callback){
     Slide.findByIdAndUpdate(id, {
         $push: {
-            screens: screen
+            screens: {
+                $each: screens
+            }
         }
     }, callback);
 }
 
-module.exports.removeSlideFromScreen = function(id, screen, callback)
+
+module.exports.removeSlideFromScreens = function(id, screens, callback)
 {
     Slide.findByIdAndUpdate(id, {
         $pull: {
             screens: {
-                $in: [screen]
+                $in: screens
             }
         }
     }, callback);

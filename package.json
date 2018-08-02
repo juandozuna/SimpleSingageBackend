@@ -53,7 +53,9 @@
     "electron-devtools-installer": "^2.1.0",
     "electron-squirrel-startup": "^1.0.0",
     "express": "^4.16.3",
+    "express-validator": "^5.3.0",
     "mongoose": "^5.2.6",
+    "mongoose-sequence": "^4.0.1",
     "vue": "^2.1.7"
   },
   "devDependencies": {

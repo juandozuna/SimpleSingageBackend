@@ -55,6 +55,53 @@ module.exports.removeSlidesFromScreen = function(id, slides, callback){
     },callback);
 }
 
+module.exports.removeSlideFromScreen = function(id, slide, callback){
+    Screen.findByIdAndUpdate(id, {
+        $pull: {
+            slides: {
+                $in: [slide]
+            }
+        }
+    },callback);
+}
+
+module.exports.removeSlideFromScreens = function(query, slide){
+    Screen.updateMany(query, {
+        $pull: {
+            slides: slide
+        }
+    }).exec();
+}
+
+module.exports.addSlideToScreen = function(id, slide, callback){
+    Screen.findByIdAndUpdate(id, {
+        $push: {
+            slides: {
+                $each: [slide]
+            }
+        }
+    }, callback);
+}
+
+module.exports.addSlidesToScreen = function(id, slides, callback){
+    Screen.findByIdAndUpdate(id, {
+        $push: {
+            slides: {
+                $each: slides
+            }
+        }
+    }, callback);
+}
+
+module.exports.addSlidetoScreens = function(query, slide){
+    Screen.updateMany(query, {
+        $push: {
+            slides: slide
+        }
+    }).exec();
+}
+
+
 module.exports.removeScreenById = function(id, callback){
     Screen.findByIdAndRemove(id, callback);
 }
