@@ -62,7 +62,9 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-exp.listen(3000, (err) => {
-  if(err) throw err;
-  console.log('Server Started in port ' + 3000);
-})
+ipcMain.on('start server', (event, args) => {
+  exp.listen(3000, (err) => {
+    if(err) throw err;
+    console.log('Server Started in port ' + 3000);
+  });
+} );

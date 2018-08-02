@@ -2,7 +2,7 @@
   <div>
     <h1>Hello from vue</h1>
     <br>
-    <button @click="install">Install Package</button>
+    <button @click="start">Start Server</button>
   </div>
 </template>
 
@@ -10,7 +10,7 @@
 const electron = require('electron');
 const ipcRenderer = electron.ipcRenderer;
 export default {
-  name: 'test',
+  name: 'main',
   data () {
     return {
        text: '',
@@ -18,8 +18,8 @@ export default {
     }
   },
   methods: {
-    install(){
-      ipcRenderer.send('install package');
+    start(){
+      ipcRenderer.send('start server');
     }
   }
 }
