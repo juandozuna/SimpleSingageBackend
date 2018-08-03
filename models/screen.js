@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const Scheme = mongoose.Scheme;
+const Schema = mongoose.Schema;
 
-const screenScheme = new Scheme({
+const screenSchema = new Schema({
     name: {
         type: String,
         unique: true,
@@ -24,7 +24,7 @@ const screenScheme = new Scheme({
     }
 }); 
 
-const Screen = module.exports = mongoose.model('Screen', screenScheme);
+const Screen = module.exports = mongoose.model('Screen', screenSchema);
 
 module.exports.getAllScreens = function(callback){
     Screen.find({}, callback);
@@ -93,7 +93,7 @@ module.exports.addSlidesToScreen = function(id, slides, callback){
     }, callback);
 }
 
-module.exports.addSlidetoScreens = function(query, slide){
+module.exports.addSlideToScreens = function(query, slide){
     Screen.updateMany(query, {
         $push: {
             slides: slide
@@ -103,5 +103,5 @@ module.exports.addSlidetoScreens = function(query, slide){
 
 
 module.exports.removeScreenById = function(id, callback){
-    Screen.findByIdAndRemove(id, callback);
+    Screen.remove({_id: id}, callback);
 }

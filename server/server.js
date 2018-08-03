@@ -16,7 +16,7 @@ app.use(bodyParser.json())
 /*app.use(bodyParser.urlencoded({ extended: false }))*/
 
 //Mongoose Setup -- Connect
-mongoose.connect('mongodb://localhost:27017/SimpleSingage');
+mongoose.connect('mongodb://localhost:27017/SimpleSingage', {useNewUrlParser: true});
 const db = mongoose.connection;
 
 // Express validator
@@ -44,11 +44,17 @@ const screensApi = require('./routes/screensApi');
 
 
 app.get('/', (req, res, next) => {
-    res.send('hello world');
+    let data = {
+      message: "Hello the server is running"
+    };
+    res.json(data);
 });
 
 app.use('/api/slides', slidesApi);
 app.use('/api/screens', screensApi);
 
+app.listen(3000, (err) => {
+  console.log('Server listening on port ' + 3000);
+})
 
-module.exports = app;
+//module.exports = app;

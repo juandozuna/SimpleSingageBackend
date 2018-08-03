@@ -34,7 +34,7 @@ module.exports.getAllSlides = function(callback){
 }
 
 module.exports.getSlidesByScreen = function(screen, callback){
-    Slide.find({screens: {$all: [screen]}}, callback);
+    Slide.find({screens: screen}, callback);
 }
 
 module.exports.addSlide = function(slide, callback){
@@ -46,32 +46,26 @@ module.exports.getSlideById = function(id, callback){
 }
 
 //Overload 2 - Takes options
-module.exports.updateSlide = function(id, update,options, callback)
-{
-    Slide.findByIdAndUpdate(id, update, options, callback);
-}
-
-//Overload 1 - Doesn't take options
 module.exports.updateSlide = function(id, update, callback)
 {
-    Slide.findByIdAndUpdate(id, update, callback);
+    Slide.update({_id: id}, update, callback);
 }
+
 
 
 module.exports.addSlideToScreens = function(id, screens, callback){
-    Slide.findByIdAndUpdate(id, {
-        $push: {
-            screens: {
-                $each: screens
-            }
+    
+    Slide.update({_id: id}, {
+        $addToSet: {
+            screens: screens
         }
-    }, callback);
+    }, callback)
 }
 
 
 module.exports.removeSlideFromScreens = function(id, screens, callback)
 {
-    Slide.findByIdAndUpdate(id, {
+    Slide.update({_id: id}, {
         $pull: {
             screens: {
                 $in: screens
@@ -81,7 +75,7 @@ module.exports.removeSlideFromScreens = function(id, screens, callback)
 }
 
 module.exports.removeSlideById = function(id, callback){
-    Slide.findByIdAndRemove(id, callback);
+    Slide.remove({_id: id}, callback);
 }
 
 

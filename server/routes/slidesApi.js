@@ -5,7 +5,7 @@
  */
 
 const express = require('express');
-const router = express.Router;
+const router = express.Router() ;
 const {check, validationResult} = require('express-validator/check');
 //Importing model
 const Screen = require('../../models/screen.js');
@@ -49,21 +49,21 @@ router.get('/single/:id', (req, res, next) => {
 //PUT req -- Update Info in Slide
 router.put('/edit/:id', (req, res, next) => {
     const id = req.params.id;
-    const update = {
-        title: req.body.title,
-        subtitle: req.body.subtitle,
-        dispalyOrder: req.body.dispalyOrder,
-        role: req.body.role,
-        image: req.body.image,
-        video: req.body.video,
-        viewSchedule: req.body.viewSchedule,
-        visible: req.body.visible,
-        overlayHtml: req.body.overlayHtml
+    let update = {
+        $set:{
+            title: req.body.title,
+            subtitle: req.body.subtitle,
+            dispalyOrder: req.body.dispalyOrder,
+            visible: req.body.visible,
+            overlayHtml: req.body.overlayHtml,
+            viewSchedule: req.body.viewSchedule
+        }
     };
-    Slide.updateSlide(id, update, {new: true}, (err, slide) => {
-        if(err) res.send(err);
+    Slide.updateSlide(id, update, (err, slide) => {
+        if(err) res.json(err);
         res.json(slide);
     });
+    
 });
 
 //POST - Add a Slide to Screens
@@ -75,7 +75,7 @@ router.post('/screen/addslide/:id', (req, res, next) => {
             $in: screens
         }
     }, id);
-    Slide.addSlideToSreens(id, screens, (err, slide) => {
+    Slide.addSlideToScreens(id, screens, (err, slide) => {
         if(err) res.send(err);
         res.json(slide);
     })
@@ -91,7 +91,7 @@ router.post('/screen/removeslide/:id', (req, res, next) => {
         }
     };
     Screen.removeSlideFromScreens(query, id);
-    Slide.removeSlideFromScreen(id, screens, (err, slide) => {
+    Slide.removeSlideFromScreens(id, screens, (err, slide) => {
         if(err) res.send(err);
         res.json(slide);
     })
@@ -99,16 +99,36 @@ router.post('/screen/removeslide/:id', (req, res, next) => {
 
 //Get all Slides in a given Screen
 router.get('/screen/:screen', (req, res, next) => {
-    const screenId = req.params.screenId;
-    Slide.getSlidesByScreen(screenId, (err, slides) => {
+    Slide.getSlidesByScreen(req.params.screen, (err, slides) => {
         if(err) res.send(err);
+
         res.json(slides);
     });
 });
 
+//PROCESS TO DELETE A SLIDE
+router.delete('/delete/:id', (req, res, next) => {
+    const id = req.params.id;
 
+    Slide.removeSlideById(id, (err, slide) => {
+        if(err){
+            res.send(err);
+            return;
+        }
+        Screen.updateMany({slides: id}, {
+            $pull: {
+                slides: id
+            }
+        }, (err, raw) => {
+            if(err){
+                res.send(err);
+                return;
+            }
+            res.send(slide);
+        })
+    })
 
-
+});
 
 
 
