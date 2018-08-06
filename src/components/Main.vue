@@ -3,10 +3,12 @@
     <h1>Hello from vue</h1>
     <br>
     <button @click="start">Start Server</button>
+   
   </div>
 </template>
 
 <script>
+
 const electron = require('electron');
 const ipcRenderer = electron.ipcRenderer;
 export default {
@@ -21,6 +23,8 @@ export default {
     start(){
       ipcRenderer.send('start server');
     }
+  },
+  created(){
   }
 }
 </script>

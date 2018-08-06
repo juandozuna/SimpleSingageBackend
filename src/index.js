@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
 import { enableLiveReload } from 'electron-compile';
-const exp = require('../server/app');
+const exp = require('../server/server');
 
 const path = require('path');
 const fs = require('fs');
@@ -63,8 +63,9 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 ipcMain.on('start server', (event, args) => {
-  exp.listen(3000, (err) => {
+  /*exp.listen(3000, (err) => {
     if(err) throw err;
     console.log('Server Started in port ' + 3000);
-  });
+  });*/
+  console.log('server has not started');
 } );

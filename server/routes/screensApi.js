@@ -65,12 +65,18 @@ router.get('/:name', (req, res, next) => {
             res.send(err);
             return;
         }
-        res.json(screen);
+        Slide.getSlidesByScreen(screen._id, (err, slides)=> {
+            if(err) res.send(err);
+            res.json({
+                screen: screen,
+                slides: slides
+            });
+        });
     });
 });
 
 //PUT -- Modify properies of slider
-router.put('/edit/:id', (req, res, next) => {
+router.post('/edit/:id', (req, res, next) => {
     const id = req.params.id;
     let updated = {
         $set: {
@@ -80,7 +86,7 @@ router.put('/edit/:id', (req, res, next) => {
             framework: req.body.framework
         }
     };
-    Screen.update({_id: id}, update, (err, raw) => {
+    Screen.update({_id: id}, updated, (err, raw) => {
         if(err){
             res.send(err);
             return;

@@ -7,7 +7,10 @@ const screenSchema = new Schema({
         unique: true,
         required: true,
     },
-    slides: [String],
+    slides: [{
+        type: String,
+        unique: true
+    }],
     showControls: {
         type: Boolean,
         default: false

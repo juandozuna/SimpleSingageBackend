@@ -13,7 +13,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //Set Body Parser
 app.use(bodyParser.json())
-/*app.use(bodyParser.urlencoded({ extended: false }))*/
+app.use(bodyParser.urlencoded({ extended: false }))
 
 //Mongoose Setup -- Connect
 mongoose.connect('mongodb://localhost:27017/SimpleSingage', {useNewUrlParser: true});
@@ -40,7 +40,15 @@ app.use(expressValidator({
 //routes
 const slidesApi = require('./routes/slidesApi');
 const screensApi = require('./routes/screensApi');
+const frameworks = require('./routes/frameworks');
 
+
+//Middleware to enable comunication with outside world
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+})
 
 
 app.get('/', (req, res, next) => {
@@ -52,6 +60,7 @@ app.get('/', (req, res, next) => {
 
 app.use('/api/slides', slidesApi);
 app.use('/api/screens', screensApi);
+app.use('/api/frameworks', frameworks);
 
 app.listen(3000, (err) => {
   console.log('Server listening on port ' + 3000);

@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const slideSchema = new Schema({
-    title: {type: String, required: true},
+    title: {type: String, required: true, unique: true},
     subtitle: String,
     displayOrder: Number,
     role: {
